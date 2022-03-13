@@ -17,7 +17,6 @@ export const CssBaseline = createGlobalStyle`
   #root {
     min-height: 100%;
     height: 100%;
-    padding-bottom: 10px;
     box-sizing: border-box;
   }
 

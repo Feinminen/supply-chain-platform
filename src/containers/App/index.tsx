@@ -1,19 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Header } from '../../components/Header'
+import { Sidebar } from '../../components/Sidebar'
 import { useAuth } from '../../services/hooks/useAuth'
 import { AuthorizationForm } from '../../components/AuthorizationForm'
+import { MainContent } from '../MainContent'
+import { ContentType } from '../../services/hooks/useTableContent/types'
 import { Content } from './styled'
 
 export const App = () => {
   const { requestToken, token, isLoading, errorMessage } = useAuth()
+  const [selectedTitle, setSelectedTitle] = useState<ContentType>('suppliers')
 
   return (
     <Content>
-      <Header />
+      <Sidebar onTabChange={setSelectedTitle} />
       {!token && (
         <AuthorizationForm onSubmit={requestToken} isLoading={isLoading} error={errorMessage} />
       )}
+      <MainContent title={selectedTitle} token={token} />
     </Content>
   )
 }

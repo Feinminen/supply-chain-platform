@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import LoadingButton from '@mui/lab/LoadingButton'
 
-import { AuthRequestParams } from '../../services/hooks/types'
+import { AuthRequestParams } from '../../services/hooks/useAuth/types'
 import { Paper, FormContainer, Content, ErrorContainer, ErrorMessage } from './styled'
 
 interface AuthorizationFormProps {
@@ -18,8 +18,6 @@ const DEFAULT_INPUT_VALUE = ''
 export const AuthorizationForm = memo(({ onSubmit, isLoading, error }: AuthorizationFormProps) => {
   const [username, setUsername] = useState(DEFAULT_INPUT_VALUE)
   const [password, setPassword] = useState(DEFAULT_INPUT_VALUE)
-
-  console.log(error)
 
   const handleUsernameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value),

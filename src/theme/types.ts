@@ -23,6 +23,7 @@ export interface Theme extends BaseTheme {
   background: {
     base: string
     primary: string
+    secondary: string
   }
   shadow: {
     normal: string

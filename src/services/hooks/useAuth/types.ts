@@ -4,6 +4,7 @@ export const ApiAuthResponse = t.Record({
   token: t.String,
 })
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ApiAuthResponse = t.Static<typeof ApiAuthResponse>
 
 export interface AuthRequestParams {

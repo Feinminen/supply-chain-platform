@@ -17,6 +17,7 @@ export const light: Theme = {
   background: {
     base: '#E5E5E5',
     primary: '#FFFFFF',
+    secondary: '#f7f7f7',
   },
   shadow: {
     normal: '0px 4px 48px rgba(0, 0, 0, 0.12)',

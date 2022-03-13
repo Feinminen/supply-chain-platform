@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 
-import { BASE_API_URL } from '../../shared/config'
-import { prepareResponse } from './utils'
+import { BASE_API_URL } from '../../../shared/config'
+import { prepareResponse } from '../utils'
 import { ApiAuthResponse, AuthData, AuthRequestParams } from './types'
 
 const DEFAULT_ERROR_MESSAGE = 'Something went wrong, please try another credentials'
@@ -34,26 +34,29 @@ export function useAuth(): AuthData {
       })
   }, [])
 
-  const requestToken = useCallback(async (params: AuthRequestParams) => {
-    setIsLoading(true)
-    setErrorMessage(null)
+  const requestToken = useCallback(
+    async (params: AuthRequestParams) => {
+      setIsLoading(true)
+      setErrorMessage(null)
 
-    try {
-      const { token } = await makeAuthRequest(params)
-      setToken(token)
-    } catch (e: any) {
-      if (e['non_field_errors']) {
-        setErrorMessage(e['non_field_errors'][0])
-      } else {
-        setErrorMessage(DEFAULT_ERROR_MESSAGE)
+      try {
+        const { token } = await makeAuthRequest(params)
+        setToken(token)
+      } catch (e: any) {
+        if (e['non_field_errors']) {
+          setErrorMessage(e['non_field_errors'][0])
+        } else {
+          setErrorMessage(DEFAULT_ERROR_MESSAGE)
+        }
+
+        throw e
+      } finally {
+        setIsLoading(false)
+        abortController.current = null
       }
-
-      throw e
-    } finally {
-      setIsLoading(false)
-      abortController.current = null
-    }
-  }, [])
+    },
+    [makeAuthRequest]
+  )
 
   return {
     token,
