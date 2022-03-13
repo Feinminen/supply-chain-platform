@@ -18,6 +18,7 @@ export interface Theme extends BaseTheme {
     separator: string
     focus: string
     positive: string
+    negative: string
   }
   background: {
     base: string

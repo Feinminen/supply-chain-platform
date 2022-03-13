@@ -12,6 +12,7 @@ export const light: Theme = {
     separator: 'rgba(31, 32, 65, 0.25)',
     focus: '#3f9af5',
     positive: '#33be51',
+    negative: '#ee655a',
   },
   background: {
     base: '#E5E5E5',
