@@ -5,6 +5,8 @@ Simple UI to suppliers vendors and quotes
 ## Notes
 
 - App is not fully responsive.
+- There is no routing
+- For full typesafety, it's necessary to add a few typeguards
 - Requests data are not cached because I was not sure if the same data is returned from a request with the same parameters.
 - I've tried to avoid premature optimization and generalization (requests to the API could be separated into a separate service)
 
