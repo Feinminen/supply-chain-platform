@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { memo } from 'react'
 
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
@@ -14,7 +14,7 @@ interface SupplierCardModalProps {
   onClose: () => void
 }
 
-export const SupplierCardModal = ({ isOpen, onClose, data }: SupplierCardModalProps) => {
+export const SupplierCardModal = memo(({ isOpen, onClose, data }: SupplierCardModalProps) => {
   return (
     <Modal sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2' }} open={isOpen} onClose={onClose}>
       <Paper>
@@ -31,4 +31,6 @@ export const SupplierCardModal = ({ isOpen, onClose, data }: SupplierCardModalPr
       </Paper>
     </Modal>
   )
-}
+})
+
+SupplierCardModal.displayName = 'SupplierCardModal'

@@ -1,16 +1,14 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, memo } from 'react'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 
 import { ContentType } from '../../services/hooks/useTableContent/types'
 import { StyledTabs } from './styled'
 
-function a11yProps(index: number) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  }
-}
+const a11yProps = (index: number) => ({
+  id: `vertical-tab-${index}`,
+  'aria-controls': `vertical-tabpanel-${index}`,
+})
 
 const TAB_ELEMENTS: ContentType[] = ['suppliers', 'quotes']
 
@@ -18,7 +16,7 @@ interface VerticalTabsProps {
   onChange: (title: ContentType) => void
 }
 
-export const VerticalTabs = ({ onChange }: VerticalTabsProps) => {
+export const VerticalTabs = memo(({ onChange }: VerticalTabsProps) => {
   const [value, setValue] = React.useState(0)
   const handleChange = useCallback(
     (_: React.SyntheticEvent, index: number) => {
@@ -37,4 +35,6 @@ export const VerticalTabs = ({ onChange }: VerticalTabsProps) => {
       </StyledTabs>
     </Box>
   )
-}
+})
+
+VerticalTabs.displayName = 'VerticalTabs'

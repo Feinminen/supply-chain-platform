@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { Typography } from '@mui/material'
 
@@ -12,7 +12,7 @@ interface TableContentProps {
   token: string
 }
 
-export const MainContent = ({ title, token }: TableContentProps) => {
+export const MainContent = memo(({ title, token }: TableContentProps) => {
   return (
     <Wrapper>
       <Typography textTransform="capitalize" variant="h4" component="div" gutterBottom>
@@ -21,4 +21,6 @@ export const MainContent = ({ title, token }: TableContentProps) => {
       <TableContent contentType={title} token={token} />
     </Wrapper>
   )
-}
+})
+
+MainContent.displayName = 'MainContent'

@@ -31,3 +31,7 @@ export const LoaderWrapper = styled.div`
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.25);
 `
+
+export const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.palette.negative};
+`

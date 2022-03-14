@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import styled, { keyframes } from 'styled-components'
 
@@ -38,7 +38,7 @@ const SecondBounce = styled.div`
   }
 `
 
-export const Loader: FC<{ className?: string }> = ({ className }) => (
+export const Loader = ({ className }: { className?: string }) => (
   <Spinner className={className}>
     <FirstBounce />
     <SecondBounce />

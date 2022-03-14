@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { VerticalTabs } from '../VerticalTabs'
 import { ContentType } from '../../services/hooks/useTableContent/types'
@@ -10,7 +10,7 @@ interface SidebarProps {
   onTabChange: (title: ContentType) => void
 }
 
-export const Sidebar = ({ onTabChange }: SidebarProps) => {
+export const Sidebar = memo(({ onTabChange }: SidebarProps) => {
   return (
     <Wrapper>
       <Logo>
@@ -24,4 +24,6 @@ export const Sidebar = ({ onTabChange }: SidebarProps) => {
       </Content>
     </Wrapper>
   )
-}
+})
+
+Sidebar.displayName = 'Sidebar'
