@@ -8,15 +8,16 @@ import {
   GeneralDataRequestParams,
   SupplierRequestParams,
   SupplierDetailsResponse,
+  QuoteData,
 } from './types'
-import { getRequestUrl } from './utils'
+import { getRequestUrl, transformQuoteResponseToData } from './utils'
 
 const DEFAULT_ERROR_MESSAGE = 'Something went wrong, please reload page'
 
 export function useTableContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [data, setData] = useState<QuoteDataResponse | SuppliersDataResponse | null>(null)
+  const [data, setData] = useState<QuoteData | SuppliersDataResponse | null>(null)
   const [supplierDetails, setSupplierDetails] = useState<SupplierDetailsResponse | null>(null)
   const abortController = useRef<AbortController | null>(null)
 
@@ -41,7 +42,7 @@ export function useTableContent() {
         .then((res) =>
           params.contentType === 'suppliers'
             ? SuppliersDataResponse.check(res)
-            : QuoteDataResponse.check(res)
+            : transformQuoteResponseToData(QuoteDataResponse.check(res))
         )
         .catch(handleRuntypeError)
     },

@@ -33,7 +33,15 @@ export const TableContent = memo(({ contentType, token }: TableContentProps) => 
     setPage(0)
   }, [contentType, token, requestData])
 
-  const columns = useMemo(() => (data ? Object.keys(data.results[0]) : []), [data])
+  const columns = useMemo(
+    () =>
+      data
+        ? Object.keys(data.results[0]).map((key) =>
+            key.replace(/([A-Z]+)/g, ' $1').replace(/([A-Z][a-z])/g, ' $1')
+          )
+        : [],
+    [data]
+  )
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
       requestData({ step: newPage > page ? 'next' : 'prev', contentType, token, data: data as any })
@@ -88,11 +96,9 @@ export const TableContent = memo(({ contentType, token }: TableContentProps) => 
                     $isClickable={isRowClickable}
                     onClick={isRowClickable ? () => handleRowClick(elem.id) : undefined}
                   >
-                    <TableCell component="th" scope="row">
-                      {ROWS_PER_PAGE * page + index + 1}
-                    </TableCell>
-                    {columns.map((key) => (
-                      <TableCell key={key} component="th" scope="row">
+                    <TableCell scope="row">{ROWS_PER_PAGE * page + index + 1}</TableCell>
+                    {Object.keys(data.results[0]).map((key) => (
+                      <TableCell key={key} scope="row">
                         {elem[key]}
                       </TableCell>
                     ))}

@@ -2,10 +2,6 @@ import TableRow from '@mui/material/TableRow'
 import styled, { css } from 'styled-components'
 
 export const BodyRow = styled(TableRow)<{ $isClickable: boolean }>`
-  &:nth-child(even) {
-    background-color: ${({ theme }) => theme.background.secondary};
-  }
-
   ${({ $isClickable }) =>
     $isClickable &&
     css`

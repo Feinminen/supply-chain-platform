@@ -24,6 +24,18 @@ export const SupplierDetailsResponse = t.Record({
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type SupplierDetailsResponse = t.Static<typeof SupplierDetailsResponse>
 
+export interface QuoteData {
+  next: string | null
+  previous: string | null
+  results: {
+    id: number
+    amount: number
+    createdOn: string
+    title: string
+    supplierId: number | null
+  }[]
+}
+
 export const QuoteDataResponse = t.Record({
   next: t.Union(t.String, t.Null),
   previous: t.Union(t.String, t.Null),
