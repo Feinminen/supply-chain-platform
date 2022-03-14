@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/supply-chain-platform/static/js/main.6363f9dd.js",
+    "main.js": "/supply-chain-platform/static/js/main.771ff66b.js",
     "static/media/logo.svg": "/supply-chain-platform/static/media/logo.d009cf55e0322a5a587776982ef60348.svg",
     "index.html": "/supply-chain-platform/index.html",
-    "main.6363f9dd.js.map": "/supply-chain-platform/static/js/main.6363f9dd.js.map"
+    "main.771ff66b.js.map": "/supply-chain-platform/static/js/main.771ff66b.js.map"
   },
   "entrypoints": [
-    "static/js/main.6363f9dd.js"
+    "static/js/main.771ff66b.js"
   ]
 }
