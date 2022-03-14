@@ -95,7 +95,7 @@ export function useTableContent() {
         abortController.current = null
       }
     },
-    [makeGeneralDataRequest]
+    [makeGeneralDataRequest, makeSupplierDetailsRequest]
   )
 
   return {

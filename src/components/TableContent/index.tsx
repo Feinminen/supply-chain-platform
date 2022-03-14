@@ -53,7 +53,7 @@ export const TableContent = memo(({ contentType, token }: TableContentProps) => 
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false)
     setSupplierDetails(null)
-  }, [])
+  }, [setSupplierDetails])
 
   const isRowClickable = contentType === 'suppliers'
 
