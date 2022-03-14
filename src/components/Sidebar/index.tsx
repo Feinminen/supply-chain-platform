@@ -14,9 +14,7 @@ export const Sidebar = memo(({ onTabChange }: SidebarProps) => {
   return (
     <Wrapper>
       <Logo>
-        <a href="/">
-          <img src={logo} alt="logo" />
-        </a>
+        <img src={logo} alt="logo" />
         <Title>Best supply helper</Title>
       </Logo>
       <Content>

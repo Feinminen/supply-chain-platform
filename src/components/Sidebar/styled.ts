@@ -12,7 +12,7 @@ export const Wrapper = styled.aside`
   min-width: 250px;
 `
 
-export const Logo = styled.aside`
+export const Logo = styled.div`
   display: flex;
 
   justify-content: center;
