@@ -6,11 +6,11 @@ Implementation of the app is available on the [STAND](https://feinminen.github.i
 
 ## Notes
 
-- App is not fully responsive.
-- There is no routing
-- For full typesafety, it's necessary to add a few typeguards
+- App is not fully responsive as it wasn't required.
+- There is no routing.
+- For full typesafety, it's necessary to add a few typeguards.
 - Requests data are not cached because I was not sure if the same data is returned from a request with the same parameters.
-- I've tried to avoid premature optimization and generalization (requests to the API could be separated into a separate service)
+- I've tried to avoid premature optimization and generalization (requests to the API could be separated into a separate service).
 
 ## Project requirements:
 
