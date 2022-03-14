@@ -9,7 +9,7 @@ import { Wrapper } from './styled'
 
 interface TableContentProps {
   title: ContentType
-  token: string | null
+  token: string
 }
 
 export const MainContent = ({ title, token }: TableContentProps) => {
@@ -18,7 +18,7 @@ export const MainContent = ({ title, token }: TableContentProps) => {
       <Typography textTransform="capitalize" variant="h4" component="div" gutterBottom>
         {title}
       </Typography>
-      {token && <TableContent contentType={title} token={token} />}
+      <TableContent contentType={title} token={token} />
     </Wrapper>
   )
 }

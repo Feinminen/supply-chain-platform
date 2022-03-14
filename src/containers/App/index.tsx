@@ -14,10 +14,11 @@ export const App = () => {
   return (
     <Content>
       <Sidebar onTabChange={setSelectedTitle} />
-      {!token && (
+      {!token ? (
         <AuthorizationForm onSubmit={requestToken} isLoading={isLoading} error={errorMessage} />
+      ) : (
+        <MainContent title={selectedTitle} token={token} />
       )}
-      <MainContent title={selectedTitle} token={token} />
     </Content>
   )
 }

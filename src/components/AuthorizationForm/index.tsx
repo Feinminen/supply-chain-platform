@@ -54,10 +54,13 @@ export const AuthorizationForm = memo(({ onSubmit, isLoading, error }: Authoriza
             value={username}
             onChange={handleUsernameChange}
             placeholder="Enter username"
+            autoComplete="username"
           />
           <TextField
             name="password"
+            type="password"
             value={password}
+            autoComplete="current-password"
             onChange={handlePasswordChange}
             placeholder="Enter password"
           />

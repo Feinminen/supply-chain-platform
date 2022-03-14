@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 
 import { BASE_API_URL } from '../../../shared/config'
-import { prepareResponse } from '../utils'
+import { prepareResponse, handleRuntypeError } from '../utils'
 import { ApiAuthResponse, AuthData, AuthRequestParams } from './types'
 
 const DEFAULT_ERROR_MESSAGE = 'Something went wrong, please try another credentials'
@@ -29,9 +29,7 @@ export function useAuth(): AuthData {
     })
       .then(prepareResponse)
       .then((res) => ApiAuthResponse.check(res))
-      .catch((error) => {
-        throw JSON.parse(error.message)
-      })
+      .catch(handleRuntypeError)
   }, [])
 
   const requestToken = useCallback(

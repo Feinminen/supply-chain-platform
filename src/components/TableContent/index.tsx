@@ -7,10 +7,12 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TablePagination from '@mui/material/TablePagination'
 
+import { Loader } from '../Loader'
 import { useTableContent } from '../../services/hooks/useTableContent'
 import { ContentType } from '../../services/hooks/useTableContent/types'
+import { SupplierCardModal } from '../SupplierCardModal'
 
-import { BodyRow } from './styled'
+import { BodyRow, LoaderWrapper } from './styled'
 
 interface TableContentProps {
   contentType: ContentType
@@ -18,51 +20,87 @@ interface TableContentProps {
 }
 
 const ABSENCE_FEATURE_NUMBER = -1
+const ROWS_PER_PAGE = 10
 
 export const TableContent = ({ contentType, token }: TableContentProps) => {
-  const { requestData, data } = useTableContent()
+  const { requestData, isLoading, data, supplierDetails, setSupplierDetails } = useTableContent()
   const [page, setPage] = useState(0)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
 
   useEffect(() => {
-    requestData('initial', contentType, token, null)
+    requestData({ token, step: 'initial', contentType })
     setPage(0)
   }, [contentType, token, requestData])
 
   const columns = useMemo(() => (data ? Object.keys(data.results[0]) : []), [data])
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
-      requestData(newPage > page ? 'next' : 'prev', contentType, token, data)
+      requestData({ step: newPage > page ? 'next' : 'prev', contentType, token, data: data as any })
       setPage(newPage)
     },
     [page, contentType, token, data, requestData]
   )
 
+  const handleRowClick = useCallback(
+    (id: string) => {
+      setIsModalOpen(true)
+      requestData({ step: 'specificSupplier', token, id })
+    },
+    [requestData, token]
+  )
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false)
+    setSupplierDetails(null)
+  }, [])
+
+  const isRowClickable = contentType === 'suppliers'
+
   return (
     <>
-      <TableContainer sx={{ minHeight: 600 }}>
+      <TableContainer sx={{ minHeight: 600, position: 'relative' }}>
+        {isLoading && (
+          <LoaderWrapper>
+            <Loader />
+          </LoaderWrapper>
+        )}
         <Table sx={{ width: '100%' }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>№</TableCell>
               {columns.map((key) => (
-                <TableCell key={key}>{key}</TableCell>
+                <TableCell sx={{ textTransform: 'capitalize' }} key={key}>
+                  {key}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {data &&
-              data.results.map((elem: any, index: any) => (
-                <BodyRow key={elem.name}>
+              // TS wrongly infer types of union arrays
+              (data.results as any[]).map((elem: Record<string, string>, index: number) => (
+                <BodyRow
+                  key={elem.id}
+                  $isClickable={isRowClickable}
+                  onClick={isRowClickable ? () => handleRowClick(elem.id) : undefined}
+                >
                   <TableCell component="th" scope="row">
-                    {index + 1}
+                    {ROWS_PER_PAGE * page + index + 1}
                   </TableCell>
                   {columns.map((key) => (
-                    <TableCell component="th" scope="row">
+                    <TableCell key={key} component="th" scope="row">
                       {elem[key]}
                     </TableCell>
                   ))}
                 </BodyRow>
               ))}
+            {supplierDetails && (
+              <SupplierCardModal
+                data={supplierDetails}
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+              />
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -70,12 +108,12 @@ export const TableContent = ({ contentType, token }: TableContentProps) => {
         sx={{ overflow: 'hidden' }}
         count={ABSENCE_FEATURE_NUMBER}
         component="div"
-        rowsPerPage={10}
+        rowsPerPage={ROWS_PER_PAGE}
         rowsPerPageOptions={[ABSENCE_FEATURE_NUMBER]}
         page={page}
         onPageChange={handlePageChange}
-        backIconButtonProps={{ disabled: !data?.previous }}
-        nextIconButtonProps={{ disabled: !data?.next }}
+        backIconButtonProps={{ disabled: !data?.previous || isLoading }}
+        nextIconButtonProps={{ disabled: !data?.next || isLoading }}
       />
     </>
   )

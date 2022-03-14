@@ -1,86 +1,109 @@
 import { useCallback, useRef, useState } from 'react'
+import { BASE_API_URL } from '../../../shared/config'
 
-import { ValidationError } from 'runtypes'
-
-import { prepareResponse } from '../utils'
-import { ContentType, RequestStep, QuoteDataResponse, SuppliersDataResponse } from './types'
+import { prepareResponse, handleRuntypeError } from '../utils'
+import {
+  QuoteDataResponse,
+  SuppliersDataResponse,
+  GeneralDataRequestParams,
+  SupplierRequestParams,
+  SupplierDetailsResponse,
+} from './types'
 import { getRequestUrl } from './utils'
 
-const DEFAULT_ERROR_MESSAGE = 'Something went wrong, please try another credentials'
+const DEFAULT_ERROR_MESSAGE = 'Something went wrong, please reload page'
 
 export function useTableContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [data, setData] = useState<QuoteDataResponse | SuppliersDataResponse | null | any>(null)
+  const [data, setData] = useState<QuoteDataResponse | SuppliersDataResponse | null>(null)
+  const [supplierDetails, setSupplierDetails] = useState<SupplierDetailsResponse | null>(null)
   const abortController = useRef<AbortController | null>(null)
 
-  const makeDataRequest = useCallback(
-    async (step: RequestStep, contentType: ContentType, token: string, data: any) => {
-      if (abortController.current !== null) {
-        abortController.current.abort()
-      }
-
-      abortController.current = new AbortController()
+  const makeGeneralDataRequest = useCallback(
+    async (params: GeneralDataRequestParams, controller: AbortController) => {
       const requestUrl =
-        step === 'initial'
-          ? getRequestUrl(contentType)
-          : step === 'next'
-          ? data.next
-          : data.previous
+        params.step === 'initial'
+          ? getRequestUrl(params.contentType)
+          : params.step === 'next'
+          ? params.data.next
+          : params.data.previous
 
       return await fetch(requestUrl, {
         method: 'GET',
-        signal: abortController.current.signal,
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${params.token}`,
         },
       })
         .then(prepareResponse)
         .then((res) =>
-          contentType === 'suppliers'
+          params.contentType === 'suppliers'
             ? SuppliersDataResponse.check(res)
             : QuoteDataResponse.check(res)
         )
-        .catch((error) => {
-          throw error instanceof ValidationError
-            ? new Error(
-                `${error.name}: ${error.message}; Details: ${JSON.stringify(error.details)}`
-              )
-            : error
-        })
+        .catch(handleRuntypeError)
+    },
+    []
+  )
+
+  const makeSupplierDetailsRequest = useCallback(
+    async (params: SupplierRequestParams, controller: AbortController) => {
+      return await fetch(`${BASE_API_URL}/api/v1/suppliers/${params.id}/`, {
+        method: 'GET',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${params.token}`,
+        },
+      })
+        .then(prepareResponse)
+        .then((res) => SupplierDetailsResponse.check(res))
+        .catch(handleRuntypeError)
     },
     []
   )
 
   const requestData = useCallback(
-    async (step: RequestStep, contentType: ContentType, token: string, data: any) => {
+    async (params: GeneralDataRequestParams | SupplierRequestParams) => {
       setIsLoading(true)
       setErrorMessage(null)
 
+      if (abortController.current !== null) {
+        abortController.current.abort()
+      }
+
+      abortController.current = new AbortController()
+
       try {
-        const x = await makeDataRequest(step, contentType, token, data)
-        setData(x)
-      } catch (e: any) {
-        if (e['non_field_errors']) {
-          setErrorMessage(e['non_field_errors'][0])
+        if (params.step === 'specificSupplier') {
+          setSupplierDetails(await makeSupplierDetailsRequest(params, abortController.current))
+        } else {
+          setData(await makeGeneralDataRequest(params, abortController.current))
+        }
+      } catch (error: any) {
+        if (error['non_field_errors']) {
+          setErrorMessage(error['non_field_errors'][0])
         } else {
           setErrorMessage(DEFAULT_ERROR_MESSAGE)
         }
 
-        throw e
+        throw error
       } finally {
         setIsLoading(false)
         abortController.current = null
       }
     },
-    [makeDataRequest]
+    [makeGeneralDataRequest]
   )
 
   return {
     data,
     isLoading,
     errorMessage,
+    supplierDetails,
+    setSupplierDetails,
     requestData,
   }
 }

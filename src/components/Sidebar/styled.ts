@@ -9,7 +9,7 @@ export const Wrapper = styled.aside`
 
   background-color: ${({ theme }) => theme.background.primary};
   box-shadow: ${({ theme }) => theme.shadow.small};
-  min-width: 300px;
+  min-width: 250px;
 `
 
 export const Logo = styled.aside`
