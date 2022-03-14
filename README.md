@@ -1,6 +1,6 @@
 # Supply chain platform
 
-Simple UI to suppliers vendors and quotes
+Simple UI to show suppliers and quotes data
 
 Implementation of the app is available on the [STAND](https://feinminen.github.io/supply-chain-platform/)
 
